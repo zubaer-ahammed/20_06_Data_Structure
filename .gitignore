@@ -1,0 +1,8 @@
+# Ignore object files
+*.o
+
+# Ignore compiled C programs (executable files)
+a.out
+*.out
+
+20_06_Data_Structure
