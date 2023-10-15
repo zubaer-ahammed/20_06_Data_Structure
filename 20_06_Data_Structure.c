@@ -2,8 +2,9 @@
 #include<string.h>
 
 void showWelcomeMessage();
-void displayTitle(char* title);
 void showGoodByeMessage();
+void displayTitle(char* title);
+void printNumbersArray(int numbers[], int n);
 int getTheChoice();
 int getNumberOfElements();
 int getSearchTargetValue();
@@ -113,24 +114,6 @@ void showGoodByeMessage() {
     printf(RESET_COLOR);
 }
 
-int getTheChoice() {
-    int choice;
-    printf("\n");
-    printf("+------------------------------------------------------------------+\n");
-    printf("|   Program Options:                                               |\n");
-    printf("+------------------------------------------------------------------+\n");
-    printf("|   0. End program                                                 |\n");
-    printf("|   1. Linear Search                                               |\n");
-    printf("|   2. Binary Search                                               |\n");
-    printf("|   3. Bubble Sort                                                 |\n");
-    printf("|   4. Insertion Sort                                              |\n");
-    printf("+------------------------------------------------------------------+\n");
-
-    printf(BLUE_COLOR "Enter your choice: " RESET_COLOR);
-    scanf("%d", &choice);
-    return choice;
-}
-
 void displayTitle(char* title) {
     int titleLength = strlen(title);
 
@@ -147,6 +130,32 @@ void displayTitle(char* title) {
         printf("-");
     }
     printf("+\n");
+}
+
+void printNumbersArray(int numbers[], int n) {
+    printf("[ ");
+    for(int i=0; i<n; i++) {
+        printf("%d ", numbers[i]);
+    }
+    printf("]");
+}
+
+int getTheChoice() {
+    int choice;
+    printf("\n");
+    printf("+------------------------------------------------------------------+\n");
+    printf("|   Program Options:                                               |\n");
+    printf("+------------------------------------------------------------------+\n");
+    printf("|   0. End program                                                 |\n");
+    printf("|   1. Linear Search                                               |\n");
+    printf("|   2. Binary Search                                               |\n");
+    printf("|   3. Bubble Sort                                                 |\n");
+    printf("|   4. Insertion Sort                                              |\n");
+    printf("+------------------------------------------------------------------+\n");
+
+    printf(BLUE_COLOR "Enter your choice: " RESET_COLOR);
+    scanf("%d", &choice);
+    return choice;
 }
 
 int getNumberOfElements() {
@@ -178,7 +187,7 @@ void linearSearch(int arr[], int n, int target_value) {
         //We are retruning all matches. So, we are not using break after first match is found.
         if(arr[i] == target_value) {
             match_found = 1;
-            printf("%sThe target value %d is matched with element having index: %d%s\n", GREEN_COLOR, target_value, i, RESET_COLOR);
+            printf("%s\nThe target value %d is matched with element having index: %d%s\n", GREEN_COLOR, target_value, i, RESET_COLOR);
         }
     }
 
@@ -206,7 +215,7 @@ void binarySearch(int arr[], int n, int target_value) {
         int mid = (left + right) / 2; //Not preferred
 
         if(arr[mid] == target_value) {
-            printf(GREEN_COLOR "Element %d is found at index: %d" RESET_COLOR, target_value, mid);
+            printf(GREEN_COLOR "\nElement %d is found at index: %d" RESET_COLOR, target_value, mid);
             found = 1;
             break;
         } else if(arr[mid] < target_value) {
@@ -218,7 +227,7 @@ void binarySearch(int arr[], int n, int target_value) {
     }
 
     if(found == 0) {
-        printf(RED_COLOR "Element %d is not found the array." RESET_COLOR, target_value);
+        printf(RED_COLOR "\nElement %d is not found the array." RESET_COLOR, target_value);
     }
 
 }
@@ -226,9 +235,7 @@ void binarySearch(int arr[], int n, int target_value) {
 void bubbleSort(int arr[], int n) {
 
     printf("\n%sThe numbers before sorting: %s", GREEN_COLOR, RESET_COLOR);
-    for(int i=0; i<n; i++) {
-        printf("%d ", arr[i]);
-    }
+    printNumbersArray(arr, n);
 
     printf("\n\n%sBelow are the bubble sorting steps: %s\n", BLUE_COLOR, RESET_COLOR);
 
@@ -239,6 +246,9 @@ void bubbleSort(int arr[], int n) {
         int swapped = 0;
         /* n-i-1 because the last element is sorted with each outer loop completed
         and we don't need to check it for the next iterations */
+
+        printf(BLUE_COLOR "Step %d: Swappings\n" RESET_COLOR, i+1);
+
         for(int j=0; j<n-i-1; j++) {
 
             if(arr[j]>arr[j+1]) {
@@ -247,7 +257,7 @@ void bubbleSort(int arr[], int n) {
                 arr[j+1] = temp;
                 swapped = 1;
 
-                printf("Swapping %d with %d\n", arr[j], arr[j+1]);
+                printf("    Swapping %d with %d\n", arr[j], arr[j+1]);
 
             }
         }
@@ -260,15 +270,51 @@ void bubbleSort(int arr[], int n) {
     }
 
     printf("\n%sThe numbers after sorting(ASC): %s", GREEN_COLOR, RESET_COLOR);
-    for(int i=0; i<n; i++) {
-        printf("%d ", arr[i]);
-    }
+    printNumbersArray(arr, n);
     printf("\n");
 
 }
 
 void insertionSort(int arr[], int n) {
-    //Do insertionSort
-    printf("Program is yet to be implemented.");
+
+    int temp, key;
+
+    printf(GREEN_COLOR "\nGiven array: " BLUE_COLOR);
+    printNumbersArray(arr, n);
+
+    printf(BLUE_COLOR "\n\nInsertion Sorting steps: \n" RESET_COLOR);
+
+    for(int i=1; i<n; i++) {
+
+        key = arr[i];
+
+        // Using coremen book's insertion sort algorithm
+        /*
+        int j = i-1;
+        while(j>=0 && arr[j]>key) {
+
+            arr[j+1] = arr[j];
+            j = j-1;
+        }
+
+        arr[j+1] = key;
+        */
+
+        //Using my own algorithm
+        for(int j=i-1, k=i; j>=0 && arr[j]>key; j--, k--) {
+            //Swap elements
+            temp = arr[k];
+            arr[k] = arr[j];
+            arr[j] = temp;
+        }
+
+        printf("Step %d: array after i=%d outer loop iteration: ", i, i);
+        printNumbersArray(arr, n);
+        printf("\n");
+
+    }
+
+    printf(GREEN_COLOR "\nFinal array after insertion sorting: " RESET_COLOR);
+    printNumbersArray(arr, n);
 
 }
