@@ -1,5 +1,7 @@
 #include<stdio.h>
 #include<string.h>
+#include <stdbool.h>
+#include <math.h>
 
 void showWelcomeMessage();
 void showGoodByeMessage();
@@ -7,12 +9,16 @@ void displayTitle(char* title);
 void printNumbersArray(int numbers[], int n);
 int getTheChoice();
 int getNumberOfElements();
+int getANumber(char *title, bool positive_only);
 int getSearchTargetValue();
 void enterArrayElements(int n, int *numbers);
 void linearSearch(int arr[], int n, int target_value);
 void binarySearch(int arr[], int n, int target_value);
 void bubbleSort(int arr[], int n);
 void insertionSort(int arr[], int n);
+long double factorial(int n);
+long long int fibonacchi(int n);
+void tower_of_hanoi(int n, char A, char B, char C);
 
 //ANSI escape sequences for text colors
 #define RED_COLOR "\033[1;31m"
@@ -20,6 +26,9 @@ void insertionSort(int arr[], int n);
 #define YELLOW_COLOR "\033[1;33m"
 #define BLUE_COLOR "\033[1;34m"
 #define RESET_COLOR "\033[0m"
+#define COLOR_BOLD  "\e[1m"
+#define COLOR_OFF   "\e[m"
+
 
 int main() {
 
@@ -74,6 +83,34 @@ int main() {
                 enterArrayElements(n, numbers);
 
                 insertionSort(numbers, n);
+                break;
+            }
+            case 5: {
+                displayTitle("Factorial Of a Number");
+                int n = getANumber("Please enter a number", true);
+                long double fact = factorial(n);
+
+                printf(GREEN_COLOR "\nThe factorial of %d is = %.Lf\n" RESET_COLOR, n, fact);
+
+                break;
+            }
+            case 6: {
+                displayTitle("Fibonacci series print");
+                int n = getANumber("Please enter a the number of terms", true);
+                printf(GREEN_COLOR "\nFibonacchi series upto %d terms: " RESET_COLOR, n);
+                for(int i=0; i<n; i++) {
+                    printf("%llu ", fibonacchi(i));
+                }
+
+                break;
+            }
+            case 7: {
+                displayTitle("Tower of Hanoi");
+                int n = getANumber("Please enter the number of discs", true);
+                int num_moves = pow(2, n) - 1;
+                printf(BLUE_COLOR "\nPlease perform the following %d disc movements: \n" RESET_COLOR, num_moves, n);
+                tower_of_hanoi(n, 'A', 'B', 'C');
+
                 break;
             }
 
@@ -146,9 +183,9 @@ int getTheChoice() {
     printf("+------------------------------------------------------------------+\n");
     printf("|   Program Options:                                               |\n");
     printf("+------------------------------------------------------------------+\n");
-    printf("|   0. End program                                                 |\n");
-    printf("|   1. Linear Search                                               |\n");
-    printf("|   2. Binary Search                                               |\n");
+    printf("|   0. End program      5. Factorial of a number                   |\n");
+    printf("|   1. Linear Search    6. Fibonacci series                        |\n");
+    printf("|   2. Binary Search    7. Tower of Hanoi                          |\n");
     printf("|   3. Bubble Sort                                                 |\n");
     printf("|   4. Insertion Sort                                              |\n");
     printf("+------------------------------------------------------------------+\n");
@@ -170,6 +207,17 @@ int getSearchTargetValue() {
     printf("Enter the target search value: ");
     scanf("%d", &target_value);
     return target_value;
+}
+
+int getANumber(char *title, bool positive_only) {
+    int n;
+    printf("%s: ", title);
+    scanf("%d", &n);
+    if(positive_only && n<0) {
+        printf(RED_COLOR "\nPlease enter a positive number only.\n\n" RESET_COLOR);
+        n = getANumber(title, positive_only);
+    }
+    return n;
 }
 
 void enterArrayElements(int n, int *numbers) {
@@ -317,4 +365,37 @@ void insertionSort(int arr[], int n) {
     printf(GREEN_COLOR "\nFinal array after insertion sorting: " RESET_COLOR);
     printNumbersArray(arr, n);
 
+}
+
+long double factorial(int n) {
+
+    if( n == 0 ) {
+
+        return 1;
+
+    } else {
+
+        return n * factorial(n-1);
+    }
+}
+
+long long int fibonacchi(int n) {
+
+    if( n <= 1 ) {
+        return n;
+    } else {
+        return fibonacchi(n-1)+fibonacchi(n-2);
+    }
+
+}
+
+void tower_of_hanoi(int n, char A, char B, char C) {
+
+    if(n>0) {
+
+        tower_of_hanoi(n-1, A, C, B);
+        printf("Move disc from %c to %c\n", A, C);
+        tower_of_hanoi(n-1, B, A, C);
+
+    }
 }
