@@ -6,3 +6,6 @@ CSE21P6: Data Structures Lab Programs of Md. Zubaer Ahammed (ID: 20052801006)
 2. Binary Search
 3. Bubble Sort
 4. Insertion Sort
+5. Factorial of a number
+6. Fibonacci series
+7. Tower of Hanoi
