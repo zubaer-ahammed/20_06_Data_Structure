@@ -108,7 +108,7 @@ int main() {
                 displayTitle("Tower of Hanoi");
                 int n = getANumber("Please enter the number of discs", true);
                 int num_moves = pow(2, n) - 1;
-                printf(BLUE_COLOR "\nPlease perform the following %d disc movements: \n" RESET_COLOR, num_moves, n);
+                printf(BLUE_COLOR "\nPlease perform the following %d disc movements: \n" RESET_COLOR, num_moves);
                 tower_of_hanoi(n, 'A', 'B', 'C');
 
                 break;
