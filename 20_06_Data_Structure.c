@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<stdlib.h>
 #include<string.h>
 #include <stdbool.h>
 #include <math.h>
@@ -19,6 +20,23 @@ void insertionSort(int arr[], int n);
 long double factorial(int n);
 long long int fibonacchi(int n);
 void tower_of_hanoi(int n, char A, char B, char C);
+
+//Stack operations
+void stack_operations(int size);
+int getTheChoiceForStack();
+bool stack_push(int *stack_arr, int data);
+int stack_pop(int *stack_arr);
+int stack_peek(int *stack_arr);
+void stack_print(int *stack_arr);
+int stackIsEmpty();
+int stackIsFull(int *stack_arr);
+int stack_top = -1;
+int stack_maxsize = 10;
+
+//Queue operations
+void queue_operations(int size);
+
+
 
 //ANSI escape sequences for text colors
 #define RED_COLOR "\033[1;31m"
@@ -114,6 +132,23 @@ int main() {
                 break;
             }
 
+            case 8: {
+                displayTitle("Stack Operations");
+                int n = getANumber("Please enter the maximum size of the stack", true);
+                printf("Number = %d", n);
+                stack_operations(n);
+
+                break;
+            }
+
+            case 9: {
+                displayTitle("Queue Operations");
+                int n = getANumber("Please enter the maximum size of the queue", true);
+                queue_operations(n);
+
+                break;
+            }
+
             default:
                 printf(RED_COLOR "\nInvalid choice. Please select a valid choice from the menu.\a\n" RESET_COLOR);
                 break;
@@ -183,17 +218,37 @@ int getTheChoice() {
     printf("+------------------------------------------------------------------+\n");
     printf("|   Program Options:                                               |\n");
     printf("+------------------------------------------------------------------+\n");
-    printf("|   0. End program      5. Factorial of a number                   |\n");
-    printf("|   1. Linear Search    6. Fibonacci series                        |\n");
-    printf("|   2. Binary Search    7. Tower of Hanoi                          |\n");
-    printf("|   3. Bubble Sort                                                 |\n");
+    printf("|   0. End program      6. Fibonacci series                        |\n");
+    printf("|   1. Linear Search    7. Tower of Hanoi                          |\n");
+    printf("|   2. Binary Search    8. Stack Operations                        |\n");
+    printf("|   3. Bubble Sort      9. Queue Operations                        |\n");
     printf("|   4. Insertion Sort                                              |\n");
+    printf("|   5. Factorial                                                   |\n");
     printf("+------------------------------------------------------------------+\n");
 
     printf(BLUE_COLOR "Enter your choice: " RESET_COLOR);
     scanf("%d", &choice);
     return choice;
 }
+
+int getTheChoiceForStack() {
+    int choice;
+    printf("\n");
+    printf("+------------------------------------------------------------------+\n");
+    printf("|   Program Options:                                               |\n");
+    printf("+------------------------------------------------------------------+\n");
+    printf("|   1. Push         6. Print all elements                          |\n");
+    printf("|   2. Pop          7. Quit (Back to the Main Menu)                |\n");
+    printf("|   3. Peek                                                        |\n");
+    printf("|   4. isEmpty                                                     |\n");
+    printf("|   5. isFull                                                      |\n");
+    printf("+------------------------------------------------------------------+\n");
+
+    printf(BLUE_COLOR "Enter your choice: " RESET_COLOR);
+    scanf("%d", &choice);
+    return choice;
+}
+
 
 int getNumberOfElements() {
     int n;
@@ -398,4 +453,149 @@ void tower_of_hanoi(int n, char A, char B, char C) {
         tower_of_hanoi(n-1, B, A, C);
 
     }
+}
+
+bool stack_push(int *stack_arr, int data) {
+   if(stackIsFull(stack_arr)) {
+       printf("Stack overflow.\n");
+       return false;
+   }
+   stack_top++;
+   stack_arr[stack_top] = data;
+   return true;
+}
+
+int stack_pop(int *stack_arr) {
+
+   int value;
+    if(stackIsEmpty(stack_top)) {
+        printf("Stack underflow.\n");
+        return -1;
+    }
+
+    value = stack_arr[stack_top];
+    stack_top--;
+    return value;
+
+}
+
+int stackIsEmpty() {
+    if(stack_top == -1) {
+        return 1;
+    } else {
+        return 0;
+    }
+
+}
+
+int stackIsFull(int *stack_arr) {
+
+    if(stack_top == stack_maxsize -1) {
+        return 1;
+    } else {
+        return 0;
+    }
+
+}
+
+int stack_peek(int *stack_arr) {
+    if(stackIsEmpty()) {
+        printf("Stack underflow.\n");
+        return -1;
+    }
+    return stack_arr[stack_top];
+}
+
+void stack_print(int *stack_arr) {
+
+    if(stackIsEmpty()) {
+        printf("Stack underflow.\n");
+    } else {
+
+        printf("Stack: \n");
+        for(int i=stack_top; i>=0; i--) {
+            printf("%d ", stack_arr[i]);
+        }
+        printf("\n");
+    }
+
+}
+
+void stack_operations(int size) {
+
+    stack_maxsize = size;
+    int stack_arr[stack_maxsize];
+    int choice, data;
+
+    while(1) {
+
+        choice = getTheChoiceForStack();
+
+        switch(choice) {
+
+            case 1: {
+                printf("Enter element to be pushed: ");
+                scanf("%d", &data);
+                bool is_pushed = stack_push(stack_arr, data);
+                if(is_pushed) {
+                    printf("Element is added in the stack successfully.\n");
+                }
+
+                break;
+            }
+
+            case 2:
+                data = stack_pop(stack_arr);
+                if(data != -1) {
+                    printf("Deleted element is: %d\n", data);
+                }
+
+                break;
+
+            case 3:
+                printf("The topmost element of the stack is: %d\n", stack_peek(stack_arr));
+                break;
+
+            case 4: {
+
+                int is_empty = stackIsEmpty();
+                if(is_empty == 1) {
+                    printf("Stack is empty.\n");
+                } else {
+                    printf("Stack is not empty.\n");
+                }
+
+                break;
+            }
+
+            case 5: {
+                int is_full = stackIsFull(stack_arr);
+                if(is_full == 1) {
+                    printf("Stack is full.\n");
+                } else {
+                    printf("Stack is not full.\n");
+                }
+                break;
+            }
+
+            case 6:
+                stack_print(stack_arr);
+                break;
+
+            case 7:
+                return;
+
+            default:
+                printf("Wrong choice.\n");
+
+        }
+
+    }
+
+}
+
+void queue_operations(int size) {
+
+
+
 }
