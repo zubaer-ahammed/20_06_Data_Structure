@@ -29,13 +29,22 @@ int stack_pop(int *stack_arr);
 int stack_peek(int *stack_arr);
 void stack_print(int *stack_arr);
 int stackIsEmpty();
-int stackIsFull(int *stack_arr);
+int stackIsFull();
 int stack_top = -1;
 int stack_maxsize = 10;
 
 //Queue operations
 void queue_operations(int size);
-
+int getTheChoiceForQueue();
+bool queue_enqueue(int *queue_arr, int data);
+int queue_dequeue(int *queue_arr);
+int queue_peek(int *queue_arr);
+void queue_print(int *queue_arr);
+int queueIsFull();
+int queueIsEmpty();
+int queue_front = -1;
+int queue_rear = -1;
+int queue_maxsize = 10;
 
 
 //ANSI escape sequences for text colors
@@ -235,7 +244,7 @@ int getTheChoiceForStack() {
     int choice;
     printf("\n");
     printf("+------------------------------------------------------------------+\n");
-    printf("|   Program Options:                                               |\n");
+    printf("|   Stack Options:                                               |\n");
     printf("+------------------------------------------------------------------+\n");
     printf("|   1. Push         6. Print all elements                          |\n");
     printf("|   2. Pop          7. Quit (Back to the Main Menu)                |\n");
@@ -249,24 +258,41 @@ int getTheChoiceForStack() {
     return choice;
 }
 
+int getTheChoiceForQueue() {
+    int choice;
+    printf("\n");
+    printf("+------------------------------------------------------------------+\n");
+    printf("|   Queue Options:                                               |\n");
+    printf("+------------------------------------------------------------------+\n");
+    printf("|   1. Enqueue         6. Print all elements                       |\n");
+    printf("|   2. Dequeue         7. Quit (Back to the Main Menu)             |\n");
+    printf("|   3. Peek                                                        |\n");
+    printf("|   4. isEmpty                                                     |\n");
+    printf("|   5. isFull                                                      |\n");
+    printf("+------------------------------------------------------------------+\n");
+
+    printf(BLUE_COLOR "Enter your choice: " RESET_COLOR);
+    scanf("%d", &choice);
+    return choice;
+}
 
 int getNumberOfElements() {
     int n;
-    printf("Please enter the number of elements in the array: ");
+    printf(BLUE_COLOR "Please enter the number of elements in the array: " RESET_COLOR);
     scanf("%d", &n);
     return n;
 }
 
 int getSearchTargetValue() {
     int target_value;
-    printf("Enter the target search value: ");
+    printf(BLUE_COLOR "Enter the target search value: " RESET_COLOR);
     scanf("%d", &target_value);
     return target_value;
 }
 
 int getANumber(char *title, bool positive_only) {
     int n;
-    printf("%s: ", title);
+    printf(BLUE_COLOR "%s: "RESET_COLOR, title);
     scanf("%d", &n);
     if(positive_only && n<0) {
         printf(RED_COLOR "\nPlease enter a positive number only.\n\n" RESET_COLOR);
@@ -276,7 +302,7 @@ int getANumber(char *title, bool positive_only) {
 }
 
 void enterArrayElements(int n, int *numbers) {
-    printf("Enter the numbers: \n");
+    printf(BLUE_COLOR "Enter the numbers: \n" RESET_COLOR);
     for(int i=0; i<n; i++) {
         printf("Index[%d]: ", i);
         scanf("%d", &numbers[i]);
@@ -455,9 +481,10 @@ void tower_of_hanoi(int n, char A, char B, char C) {
     }
 }
 
+//Stack Operations
 bool stack_push(int *stack_arr, int data) {
-   if(stackIsFull(stack_arr)) {
-       printf("Stack overflow.\n");
+   if(stackIsFull()) {
+       printf(RED_COLOR "Stack overflow.\n" RESET_COLOR);
        return false;
    }
    stack_top++;
@@ -468,8 +495,8 @@ bool stack_push(int *stack_arr, int data) {
 int stack_pop(int *stack_arr) {
 
    int value;
-    if(stackIsEmpty(stack_top)) {
-        printf("Stack underflow.\n");
+    if(stackIsEmpty()) {
+        printf(RED_COLOR "Stack underflow.\n" RESET_COLOR);
         return -1;
     }
 
@@ -488,7 +515,7 @@ int stackIsEmpty() {
 
 }
 
-int stackIsFull(int *stack_arr) {
+int stackIsFull() {
 
     if(stack_top == stack_maxsize -1) {
         return 1;
@@ -500,7 +527,7 @@ int stackIsFull(int *stack_arr) {
 
 int stack_peek(int *stack_arr) {
     if(stackIsEmpty()) {
-        printf("Stack underflow.\n");
+        printf(RED_COLOR "Stack underflow.\n" RESET_COLOR);
         return -1;
     }
     return stack_arr[stack_top];
@@ -509,14 +536,14 @@ int stack_peek(int *stack_arr) {
 void stack_print(int *stack_arr) {
 
     if(stackIsEmpty()) {
-        printf("Stack underflow.\n");
+        printf(RED_COLOR "Stack underflow.\n" RESET_COLOR);
     } else {
 
-        printf("Stack: \n");
+        printf(GREEN_COLOR "Stack: \n");
         for(int i=stack_top; i>=0; i--) {
             printf("%d ", stack_arr[i]);
         }
-        printf("\n");
+        printf("\n" RESET_COLOR);
     }
 
 }
@@ -538,7 +565,7 @@ void stack_operations(int size) {
                 scanf("%d", &data);
                 bool is_pushed = stack_push(stack_arr, data);
                 if(is_pushed) {
-                    printf("Element is added in the stack successfully.\n");
+                    printf(GREEN_COLOR "Element is added in the stack successfully.\n" RESET_COLOR);
                 }
 
                 break;
@@ -547,33 +574,33 @@ void stack_operations(int size) {
             case 2:
                 data = stack_pop(stack_arr);
                 if(data != -1) {
-                    printf("Deleted element is: %d\n", data);
+                    printf(RED_COLOR "Deleted element is: %d\n" RESET_COLOR, data);
                 }
 
                 break;
 
             case 3:
-                printf("The topmost element of the stack is: %d\n", stack_peek(stack_arr));
+                printf(BLUE_COLOR "The topmost element of the stack is: %d\n" RESET_COLOR, stack_peek(stack_arr));
                 break;
 
             case 4: {
 
                 int is_empty = stackIsEmpty();
                 if(is_empty == 1) {
-                    printf("Stack is empty.\n");
+                    printf(YELLOW_COLOR "Stack is empty.\n" RESET_COLOR);
                 } else {
-                    printf("Stack is not empty.\n");
+                    printf(RED_COLOR "Stack is not empty.\n" RESET_COLOR);
                 }
 
                 break;
             }
 
             case 5: {
-                int is_full = stackIsFull(stack_arr);
+                int is_full = stackIsFull();
                 if(is_full == 1) {
-                    printf("Stack is full.\n");
+                    printf(RED_COLOR "Stack is full.\n" RESET_COLOR);
                 } else {
-                    printf("Stack is not full.\n");
+                    printf(GREEN_COLOR "Stack is not full.\n" RESET_COLOR);
                 }
                 break;
             }
@@ -586,7 +613,7 @@ void stack_operations(int size) {
                 return;
 
             default:
-                printf("Wrong choice.\n");
+                printf(RED_COLOR "Wrong choice.\n" RESET_COLOR);
 
         }
 
@@ -594,8 +621,151 @@ void stack_operations(int size) {
 
 }
 
+
+//Queue Operations
+bool queue_enqueue(int *queue_arr, int data) {
+   if(queueIsFull()) {
+       printf(RED_COLOR "Queue overflow.\n" RESET_COLOR);
+       return false;
+   }
+
+   if(queue_front == -1) {
+       queue_front = 0;
+   }
+   queue_rear++;
+   queue_arr[queue_rear] = data;
+   return true;
+}
+
+int queue_dequeue(int *queue_arr) {
+
+   int value;
+    if(queueIsEmpty()) {
+        printf(RED_COLOR "Queue underflow.\n" RESET_COLOR);
+        return -1;
+    }
+
+    value = queue_arr[queue_front];
+    queue_front++;
+    return value;
+
+}
+
+int queueIsEmpty() {
+    if(queue_front == -1 || queue_front == queue_rear + 1) {
+        //Reset front and rear when quue is empty.
+        queue_front = queue_rear = -1;
+        return 1;
+    } else {
+        return 0;
+    }
+
+}
+
+int queueIsFull() {
+
+    if(queue_rear == queue_maxsize -1) {
+        return 1;
+    } else {
+        return 0;
+    }
+
+}
+
+int queue_peek(int *queue_arr) {
+    if(queueIsEmpty()) {
+        printf(RED_COLOR "Queue underflow.\n" RESET_COLOR);
+        return -1;
+    }
+    return queue_arr[queue_front];
+}
+
+void queue_print(int *queue_arr) {
+
+    if(queueIsEmpty()) {
+        printf(RED_COLOR "Queue underflow.\n" RESET_COLOR);
+    } else {
+
+        printf(GREEN_COLOR "Queue: \n");
+        for(int i=queue_front; i<=queue_rear; i++) {
+            printf("%d ", queue_arr[i]);
+        }
+        printf("\n" RESET_COLOR);
+    }
+
+}
+
 void queue_operations(int size) {
 
+    queue_maxsize = size;
+    int queue_arr[queue_maxsize];
+    int choice, data;
+
+
+    while(1) {
+
+        choice = getTheChoiceForQueue();
+
+        switch(choice) {
+
+            case 1: {
+                printf("Enter element to be added to the queue: ");
+                scanf("%d", &data);
+                bool is_enqueued = queue_enqueue(queue_arr, data);
+                if(is_enqueued) {
+                    printf(GREEN_COLOR "Element is added/enqueued in the queue successfully.\n" RESET_COLOR);
+                }
+
+                break;
+            }
+
+            case 2:
+                data = queue_dequeue(queue_arr);
+                if(data != -1) {
+                    printf(RED_COLOR "Deleted/Dequeued element is: %d\n" RESET_COLOR, data);
+                }
+
+                break;
+
+            case 3:
+                printf(BLUE_COLOR "The first element of the queue is: %d\n" RESET_COLOR, queue_peek(queue_arr));
+                break;
+
+            case 4: {
+
+                int is_empty = queueIsEmpty();
+                if(is_empty == 1) {
+                    printf(YELLOW_COLOR "Queue is empty.\n" RESET_COLOR);
+                } else {
+                    printf(RED_COLOR "Queue is not empty.\n" RESET_COLOR);
+                }
+
+                break;
+            }
+
+            case 5: {
+                int is_full = queueIsFull(queue_arr);
+                if(is_full == 1) {
+                    printf(RED_COLOR "Queue is full.\n" RESET_COLOR);
+                } else {
+                    printf(GREEN_COLOR "Queue is not full.\n" RESET_COLOR);
+                }
+                break;
+            }
+
+            case 6:
+                queue_print(queue_arr);
+                break;
+
+            case 7:
+                return;
+
+            default:
+                printf(RED_COLOR "Wrong choice.\n" RESET_COLOR);
+
+        }
+
+    }
 
 
 }
