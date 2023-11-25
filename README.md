@@ -9,3 +9,5 @@ CSE21P6: Data Structures Lab Programs of Md. Zubaer Ahammed (ID: 20052801006)
 5. Factorial of a number
 6. Fibonacci series
 7. Tower of Hanoi
+8. Stack Operations
+9. Queue Operations
