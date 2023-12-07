@@ -11,3 +11,7 @@ CSE21P6: Data Structures Lab Programs of Md. Zubaer Ahammed (ID: 20052801006)
 7. Tower of Hanoi
 8. Stack Operations
 9. Queue Operations
+10. Singly Linked List
+11. Doubly Linked List
+12. Circular Singly Linked List
+13. Circular Doubly Linked List

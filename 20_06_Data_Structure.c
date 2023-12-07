@@ -47,6 +47,49 @@ int queue_rear = -1;
 int queue_maxsize = 10;
 
 
+//Singly Linked List
+struct node {
+    int data;
+    struct node *link;
+};
+int getTheChoiceForSinglyLinkedList();
+void singly_linked_list_operations();
+struct node *add_beg_sll(struct node *head, int d);
+struct node *add_at_end_sll(struct node *head, int d);
+struct node *add_at_pos_sll(struct node *head, int d, int pos);
+struct node *del_first_sll(struct node *head);
+struct node *del_last_sll(struct node *head);
+struct node *del_at_pos_sll(struct node *head, int pos);
+void print_sll(struct node *head);
+int count_of_nodes_sll(struct node *head, bool print_value);
+
+//Doubly Linked List
+struct node_dll {
+    struct node_dll *prev;
+    int data;
+    struct node_dll *next;
+};
+int getTheChoiceForDoublyLinkedList();
+void doubly_linked_list_operations();
+struct node_dll *add_at_end_dll(struct node_dll *head, int d);
+void print_dll(struct node_dll *head);
+int count_of_nodes_dll(struct node_dll *head, bool print_value);
+
+//Circular Singly Linked List
+int getTheChoiceForCircularLinkedList();
+void circular_singly_linked_list_operations();
+struct node *add_at_end_csll(struct node *tail, int d);
+struct node *add_at_end_csll(struct node *tail, int d);
+void print_csll(struct node *tail);
+int count_of_nodes_csll(struct node *tail, bool print_value);
+
+//Circular Doubly Linked List
+void circular_doubly_linked_list_operations();
+struct node_dll *add_at_end_cdll(struct node_dll *tail, int d);
+struct node_dll *add_at_end_cdll(struct node_dll *tail, int d);
+void print_cdll(struct node_dll *tail);
+int count_of_nodes_cdll(struct node_dll *tail, bool print_value);
+
 //ANSI escape sequences for text colors
 #define RED_COLOR "\033[1;31m"
 #define GREEN_COLOR "\033[1;32m"
@@ -158,6 +201,30 @@ int main() {
                 break;
             }
 
+            case 10: {
+                displayTitle("Singly Linked List");
+                singly_linked_list_operations();
+                break;
+            }
+
+            case 11: {
+                displayTitle("Doubly Linked List");
+                doubly_linked_list_operations();
+                break;
+            }
+
+            case 12: {
+                displayTitle("Circular Doubly Linked List");
+                circular_singly_linked_list_operations();
+                break;
+            }
+
+            case 13: {
+                displayTitle("Circular Doubly Linked List");
+                circular_doubly_linked_list_operations();
+                break;
+            }
+
             default:
                 printf(RED_COLOR "\nInvalid choice. Please select a valid choice from the menu.\a\n" RESET_COLOR);
                 break;
@@ -177,21 +244,21 @@ int main() {
 
 void showWelcomeMessage() {
     printf(GREEN_COLOR);
-    printf("********************************************************************\n");
-    printf("*            Welcome to Data Structure Programs Menu               *\n");
-    printf("*                Student Name: Md. Zubaer Ahammed                  *\n");
-    printf("*                    Student ID: 20052801006                       *\n");
-    printf("********************************************************************\n");
+    printf("******************************************************************************\n");
+    printf("*                 Welcome to Data Structure Programs Menu                    *\n");
+    printf("*                     Student Name: Md. Zubaer Ahammed                       *\n");
+    printf("*                         Student ID: 20052801006                            *\n");
+    printf("******************************************************************************\n");
     printf(RESET_COLOR);
 }
 
 void showGoodByeMessage() {
     printf(BLUE_COLOR);
-    printf("+------------------------------------------------------------------+\n");
-    printf("|                                                                  |\n");
-    printf("|                           [0]  Good Bye!                         |\n");
-    printf("|                                                                  |\n");
-    printf("+------------------------------------------------------------------+\n");
+    printf("+----------------------------------------------------------------------------+\n");
+    printf("|                                                                            |\n");
+    printf("|                                [0]  Good Bye!                              |\n");
+    printf("|                                                                            |\n");
+    printf("+----------------------------------------------------------------------------+\n");
     printf(RESET_COLOR);
 }
 
@@ -224,16 +291,16 @@ void printNumbersArray(int numbers[], int n) {
 int getTheChoice() {
     int choice;
     printf("\n");
-    printf("+------------------------------------------------------------------+\n");
-    printf("|   Program Options:                                               |\n");
-    printf("+------------------------------------------------------------------+\n");
-    printf("|   0. End program      6. Fibonacci series                        |\n");
-    printf("|   1. Linear Search    7. Tower of Hanoi                          |\n");
-    printf("|   2. Binary Search    8. Stack Operations                        |\n");
-    printf("|   3. Bubble Sort      9. Queue Operations                        |\n");
-    printf("|   4. Insertion Sort                                              |\n");
-    printf("|   5. Factorial                                                   |\n");
-    printf("+------------------------------------------------------------------+\n");
+    printf("+----------------------------------------------------------------------------+\n");
+    printf("|   Program Options:                                                         |\n");
+    printf("+----------------------------------------------------------------------------+\n");
+    printf("|   0. End program    6. Fibonacci series    12. Circular Singly Linked List |\n");
+    printf("|   1. Linear Search  7. Tower of Hanoi      13. Circular Doubly Linked List |\n");
+    printf("|   2. Binary Search  8. Stack Operations                                    |\n");
+    printf("|   3. Bubble Sort    9. Queue Operations                                    |\n");
+    printf("|   4. Insertion Sort 10. Singly Linked List                                 |\n");
+    printf("|   5. Factorial      11. Doubly Linked List                                 |\n");
+    printf("+----------------------------------------------------------------------------+\n");
 
     printf(BLUE_COLOR "Enter your choice: " RESET_COLOR);
     scanf("%d", &choice);
@@ -270,6 +337,58 @@ int getTheChoiceForQueue() {
     printf("|   4. isEmpty                                                     |\n");
     printf("|   5. isFull                                                      |\n");
     printf("+------------------------------------------------------------------+\n");
+
+    printf(BLUE_COLOR "Enter your choice: " RESET_COLOR);
+    scanf("%d", &choice);
+    return choice;
+}
+
+int getTheChoiceForSinglyLinkedList() {
+    int choice;
+    printf("\n");
+    printf("+----------------------------------------------------------------------------+\n");
+    printf("|   Singly Linked List Options:                                              |\n");
+    printf("+----------------------------------------------------------------------------+\n");
+    printf("|   1. Add at the beginning   6. Delete at position                          |\n");
+    printf("|   2. Add at the end         7. Count nodes (Traversal)                     |\n");
+    printf("|   3. Add at the position    8. Print nodes (Traversal)                     |\n");
+    printf("|   4. Delete first node      9. Quit (Back to the Main Menu)                |\n");
+    printf("|   5. Delete last node                                                      |\n");
+    printf("+----------------------------------------------------------------------------+\n");
+
+    printf(BLUE_COLOR "Enter your choice: " RESET_COLOR);
+    scanf("%d", &choice);
+    return choice;
+}
+
+int getTheChoiceForDoublyLinkedList() {
+    int choice;
+    printf("\n");
+    printf("+----------------------------------------------------------------------------+\n");
+    printf("|   Doubly Linked List Options:                                              |\n");
+    printf("+----------------------------------------------------------------------------+\n");
+    printf("|   1. Add at the end                                                        |\n");
+    printf("|   2. Count nodes (Traversal)                                               |\n");
+    printf("|   3. Print nodes (Traversal)                                               |\n");
+    printf("|   4. Quit (Back to the Main Menu)                                          |\n");
+    printf("+----------------------------------------------------------------------------+\n");
+
+    printf(BLUE_COLOR "Enter your choice: " RESET_COLOR);
+    scanf("%d", &choice);
+    return choice;
+}
+
+int getTheChoiceForCircularLinkedList() {
+    int choice;
+    printf("\n");
+    printf("+----------------------------------------------------------------------------+\n");
+    printf("|   Circular Linked List Options:                                            |\n");
+    printf("+----------------------------------------------------------------------------+\n");
+    printf("|   1. Add at the end                                                        |\n");
+    printf("|   2. Count nodes (Traversal)                                               |\n");
+    printf("|   3. Print nodes (Traversal)                                               |\n");
+    printf("|   4. Quit (Back to the Main Menu)                                          |\n");
+    printf("+----------------------------------------------------------------------------+\n");
 
     printf(BLUE_COLOR "Enter your choice: " RESET_COLOR);
     scanf("%d", &choice);
@@ -614,6 +733,7 @@ void stack_operations(int size) {
 
             default:
                 printf(RED_COLOR "Wrong choice.\n" RESET_COLOR);
+                break;
 
         }
 
@@ -762,6 +882,7 @@ void queue_operations(int size) {
 
             default:
                 printf(RED_COLOR "Wrong choice.\n" RESET_COLOR);
+                break;
 
         }
 
@@ -769,3 +890,616 @@ void queue_operations(int size) {
 
 
 }
+
+//Singly Linked List
+int count_of_nodes_sll(struct node *head, bool print_count) {
+
+    int count = 0;
+    if(head == NULL) {
+        printf("Linked list is empty.\n");
+    }
+    struct node *ptr = NULL;
+    ptr = head;
+
+    while(ptr != NULL) {
+        count++;
+        ptr = ptr->link;
+    }
+
+    if(print_count) {
+        printf("%d", count);
+    }
+
+    return count;
+
+}
+
+void print_sll(struct node *head) {
+
+    struct node *ptr = head;
+    while(ptr != NULL) {
+        printf("%d ", ptr->data);
+        ptr = ptr->link;
+    }
+
+}
+
+struct node *add_beg_sll(struct node *head, int d) {
+
+    struct node *ptr = malloc(sizeof(struct node));
+    ptr->data = d;
+    ptr->link = NULL;
+
+    ptr->link = head;
+    head = ptr;
+
+    return head;
+
+}
+
+struct node *add_at_end_sll(struct node *head, int d) {
+
+    struct node *ptr = head;
+    struct node *temp = malloc(sizeof(struct node));
+    temp->data = d;
+    temp->link = NULL;
+
+    while(ptr->link != NULL) {
+        ptr = ptr->link;
+    }
+
+    ptr->link = temp;
+
+}
+
+struct node *add_at_pos_sll(struct node *head, int d, int pos) {
+
+    int count = count_of_nodes_sll(head, false);
+    int limit = count+1;
+    if(pos > limit) {
+        printf(RED_COLOR "Position cannot exceed %d (becaue no. of nodes = %d)" RESET_COLOR, limit, count);
+    } else {
+        struct node *ptr = head;
+        struct node *ptr2 = malloc(sizeof(struct node));
+        ptr2->data = d;
+        ptr2->link = NULL;
+
+        pos--;
+        while(pos != 1) {
+            ptr = ptr->link;
+            pos--;
+        }
+
+        ptr2->link = ptr->link;
+        ptr->link = ptr2;
+
+    }
+
+
+}
+
+struct node *del_first_sll(struct node *head) {
+    if(head == NULL) {
+        printf("List is empty!");
+    } else {
+        struct node *temp = head;
+        head = head->link;
+        free(temp);
+        temp = NULL;
+    }
+
+    return head;
+}
+
+struct node *del_last_sll(struct node *head) {
+
+    if(head == NULL) {
+        printf("List is empty!");
+    } else if(head->link == NULL) { //linked list has only one node.
+        free(head);
+        head = NULL;
+    } else {
+        struct node *temp = head;
+        struct node *temp2 = head;
+
+        while(temp->link != NULL) {
+
+            temp2 = temp;
+            temp = temp->link;
+
+        }
+
+        temp2->link = NULL;
+        free(temp);
+        temp = NULL;
+    }
+
+    return head;
+
+};
+
+struct node *del_at_pos_sll(struct node *head, int pos) {
+
+    struct node *current = head;
+    struct node *previous = head;
+
+    if(head == NULL) {
+        printf("List is empty!");
+    } else if(pos == 1) { //linked list has only one node.
+        head = current->link;
+        free(current);
+        current = NULL;
+    } else {
+
+        while(pos != 1) {
+
+            previous = current;
+            current = current->link;
+            pos--;
+
+        }
+
+        previous->link = current->link;
+        free(current);
+        current = NULL;
+    }
+
+    return head;
+
+
+};
+
+void singly_linked_list_operations() {
+
+    int choice, data;
+
+    data = getANumber("Please enter the value of the root node", true);
+    struct node *head = malloc(sizeof(struct node));
+    head->data = data;
+    head->link = NULL;
+
+    /*
+    data = getANumber("Please enter the value of the next node", true);
+    struct node *current = malloc(sizeof(struct node));
+    current->data = 35;
+    current->link = NULL;
+    head->link = current;
+
+    data = getANumber("Please enter the value of the next node", true);
+    current = malloc(sizeof(struct node));
+    current->data = 44;
+    current->link = NULL;
+    head->link->link = current;
+    */
+
+    while(1) {
+
+        choice = getTheChoiceForSinglyLinkedList();
+
+        switch(choice) {
+
+            case 1: {
+                data = getANumber("Please enter the value of the node", true);
+                head = add_beg_sll(head, data);
+                break;
+            }
+
+            case 2: {
+                data = getANumber("Please enter the value of the node", true);
+                add_at_end_sll(head, data);
+                break;
+            }
+
+            case 3: {
+                data = getANumber("Please enter the value of the node", true);
+                int pos = getANumber("Please enter the position where to insert", true);
+                if(pos <= 1) {
+                    head = add_beg_sll(head, data);
+                } else {
+                    add_at_pos_sll(head, data, pos);
+                }
+
+                break;
+            }
+
+            case 4:
+                head = del_first_sll(head);
+                break;
+
+            case 5:
+                head = del_last_sll(head);
+                break;
+
+            case 6:{
+                int pos = getANumber("Please enter the position where to delete", true);
+                del_at_pos_sll(head, pos);
+                break;
+            }
+
+            case 7:
+                count_of_nodes_sll(head, true);
+                break;
+
+            case 8:
+                print_sll(head);
+                break;
+
+            case 9:
+                return;
+
+            default:
+                printf(RED_COLOR "Wrong choice.\n" RESET_COLOR);
+                break;
+
+        }
+
+    }
+
+}
+
+
+//Doubly Linked List
+int count_of_nodes_dll(struct node_dll *head, bool print_count) {
+
+    int count = 0;
+    if(head == NULL) {
+        printf("Linked list is empty.\n");
+    }
+    struct node_dll *ptr = NULL;
+    ptr = head;
+
+    while(ptr != NULL) {
+        count++;
+        ptr = ptr->next;
+    }
+
+    if(print_count) {
+        printf("%d", count);
+    }
+
+    return count;
+
+}
+
+void print_dll(struct node_dll *head) {
+
+    struct node_dll *ptr = head;
+    while(ptr != NULL) {
+        printf("%d ", ptr->data);
+        ptr = ptr->next;
+    }
+
+}
+
+struct node_dll *add_at_end_dll(struct node_dll *head, int d) {
+
+    struct node_dll *ptr = head;
+    struct node_dll *temp = malloc(sizeof(struct node_dll));
+    temp->data = d;
+    temp->prev = NULL;
+    temp->next = NULL;
+
+    while(ptr->next != NULL) {
+        ptr = ptr->next;
+    }
+
+    temp->prev = ptr;
+    ptr->next = temp;
+
+
+}
+
+void doubly_linked_list_operations() {
+
+    int choice, data;
+
+    data = getANumber("Please enter the value of the root node", true);
+    struct node_dll *head = malloc(sizeof(struct node_dll));
+    head->data = data;
+    head->prev = NULL;
+    head->next = NULL;
+
+    /*
+    data = getANumber("Please enter the value of the next node", true);
+    struct node_dll *current = malloc(sizeof(struct node_dll));
+    current->data = 35;
+    current->link = NULL;
+    head->link = current;
+
+    data = getANumber("Please enter the value of the next node", true);
+    current = malloc(sizeof(struct node_dll));
+    current->data = 44;
+    current->link = NULL;
+    head->link->link = current;
+    */
+
+    while(1) {
+
+        choice = getTheChoiceForDoublyLinkedList();
+
+        switch(choice) {
+
+            case 1: {
+                data = getANumber("Please enter the value of the node", true);
+                add_at_end_dll(head, data);
+                break;
+            }
+
+            case 2: {
+                count_of_nodes_dll(head, true);
+                break;
+            }
+
+            case 3: {
+                print_dll(head);
+                break;
+            }
+
+            case 4:
+                return;
+
+            default:
+                printf(RED_COLOR "Wrong choice.\n" RESET_COLOR);
+                break;
+
+        }
+
+    }
+
+}
+
+
+//Circular Singly Linked List
+int count_of_nodes_csll(struct node *tail, bool print_count) {
+
+    int count = 0;
+    if(tail == NULL) {
+        printf("Linked list is empty.\n");
+    }
+    struct node *ptr = NULL;
+    ptr = tail->link; //tail->link means head or the first node.
+
+    do {
+        count++;
+        ptr = ptr->link;
+    } while(ptr != tail->link);
+
+    if(print_count) {
+        printf("%d", count);
+    }
+
+    return count;
+
+}
+
+void print_csll(struct node *tail) {
+
+    struct node *ptr = tail->link; //tail->next points to the head or first node
+
+    do {
+        printf("%d ", ptr->data);
+        ptr = ptr->link;
+    } while(ptr != tail->link);
+
+}
+
+struct node_dll *add_to_empty_csll(int d) {
+
+    struct node *temp = malloc(sizeof(struct node));
+    temp->data = d;
+    temp->link = temp;
+
+    return temp;
+
+};
+
+struct node *add_at_end_csll(struct node *tail, int d) {
+
+    struct node *newNode = malloc(sizeof(struct node));
+
+    if(tail == NULL) {
+        return add_to_empty_csll(d);
+    }
+
+    newNode->data = d;
+    newNode->link = tail->link;
+
+    tail->link = newNode;
+    tail = newNode;
+
+    return tail;
+
+}
+
+void circular_singly_linked_list_operations() {
+
+    int choice, data;
+
+    data = getANumber("Please enter the value of the root node", true);
+    struct node *tail = malloc(sizeof(struct node));
+    tail->data = data;
+    tail->link = tail;
+
+    /*
+    data = getANumber("Please enter the value of the next node", true);
+    struct node *current = malloc(sizeof(struct node));
+    current->data = 35;
+    current->link = tail->link;
+    tail->link = current;
+    tail = current;
+
+    data = getANumber("Please enter the value of the next node_sll", true);
+    current = malloc(sizeof(struct node));
+    current->data = 44;
+    current->link = tail->link;
+    tail->link = current;
+    tail = current;
+    */
+
+    while(1) {
+
+        choice = getTheChoiceForCircularLinkedList();
+
+        switch(choice) {
+
+            case 1: {
+                data = getANumber("Please enter the value of the node", true);
+                add_at_end_csll(tail, data);
+                break;
+            }
+
+            case 2: {
+                count_of_nodes_csll(tail, true);
+                break;
+            }
+
+            case 3: {
+                print_csll(tail);
+                break;
+            }
+
+            case 4:
+                return;
+
+            default:
+                printf(RED_COLOR "Wrong choice.\n" RESET_COLOR);
+                break;
+
+        }
+
+    }
+
+}
+
+
+//Circular Doubly Linked List
+int count_of_nodes_cdll(struct node_dll *tail, bool return_only) {
+
+    int count = 0;
+    if(tail == NULL) {
+        printf("Linked list is empty.\n");
+    }
+    struct node_dll *ptr = NULL;
+    ptr = tail->next; //tail->next means the head or first node.
+
+    do {
+        count++;
+        ptr = ptr->next;
+    } while(ptr != tail->next);
+
+    printf("%d", count);
+
+    if(return_only) {
+        return count;
+    }
+
+}
+
+void print_cdll(struct node_dll *tail) {
+
+    if(tail == NULL) {
+        printf("Linked list is empty.\n");
+    }
+
+    struct node_dll *ptr = tail->next; //tail next is the head or first node.
+    do{
+        printf("%d ", ptr->data);
+        ptr = ptr->next;
+    } while(ptr != tail->next);
+
+}
+
+struct node_dll *add_to_empty_cdll(int d) {
+
+    struct node_dll *temp = malloc(sizeof(struct node_dll));
+    temp->prev = temp;
+    temp->data = d;
+    temp->next = temp;
+
+    return temp;
+
+};
+
+struct node_dll *add_at_end_cdll(struct node_dll *tail, int d) {
+
+    struct node_dll *newNode = malloc(sizeof(struct node_dll));
+
+    if(tail == NULL) {
+        return add_to_empty_cdll(d);
+    }
+
+
+    newNode->data = d;
+    newNode->prev = tail;
+    newNode->next = tail->next;
+    tail->next = newNode;
+    tail = newNode;
+
+    return tail;
+
+
+}
+
+void circular_doubly_linked_list_operations() {
+
+    int choice, data;
+
+    data = getANumber("Please enter the value of the root node", true);
+    struct node_dll *tail = malloc(sizeof(struct node_dll));
+    tail->data = data;
+    tail->prev = tail;
+    tail->next = tail;
+
+    /*
+    data = getANumber("Please enter the value of the next node", true);
+    struct node_dll *current = malloc(sizeof(struct node_dll));
+    current->data = 35;
+    current->prev = tail;
+    current->next = tail->next;
+    tail->next = current;
+    tail = current;
+
+    data = getANumber("Please enter the value of the next node", true);
+    current = malloc(sizeof(struct node_dll));
+    current->data = 44;
+    current->prev = tail;
+    current->next = tail->next;
+    tail->next = current;
+    tail = current;
+    */
+
+    while(1) {
+
+        choice = getTheChoiceForCircularLinkedList();
+
+        switch(choice) {
+
+            case 1: {
+                data = getANumber("Please enter the value of the node", true);
+                add_at_end_cdll(tail, data);
+                break;
+            }
+
+            case 2: {
+                count_of_nodes_cdll(tail, true);
+                break;
+            }
+
+            case 3: {
+                print_cdll(tail);
+                break;
+            }
+
+            case 4:
+                return;
+
+            default:
+                printf(RED_COLOR "Wrong choice.\n" RESET_COLOR);
+                break;
+
+        }
+
+    }
+
+}
+
