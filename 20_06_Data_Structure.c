@@ -78,15 +78,17 @@ int count_of_nodes_dll(struct node_dll *head, bool print_value);
 //Circular Singly Linked List
 int getTheChoiceForCircularLinkedList();
 void circular_singly_linked_list_operations();
-struct node *add_at_end_csll(struct node *head, int d);
-void print_csll(struct node *head);
-int count_of_nodes_csll(struct node *head, bool print_value);
+struct node *add_at_end_csll(struct node *tail, int d);
+struct node *add_at_end_csll(struct node *tail, int d);
+void print_csll(struct node *tail);
+int count_of_nodes_csll(struct node *tail, bool print_value);
 
 //Circular Doubly Linked List
 void circular_doubly_linked_list_operations();
-struct node_dll *add_at_end_cdll(struct node_dll *head, int d);
-void print_cdll(struct node_dll *head);
-int count_of_nodes_cdll(struct node_dll *head, bool print_value);
+struct node_dll *add_at_end_cdll(struct node_dll *tail, int d);
+struct node_dll *add_at_end_cdll(struct node_dll *tail, int d);
+void print_cdll(struct node_dll *tail);
+int count_of_nodes_cdll(struct node_dll *tail, bool print_value);
 
 //ANSI escape sequences for text colors
 #define RED_COLOR "\033[1;31m"
@@ -207,22 +209,19 @@ int main() {
 
             case 11: {
                 displayTitle("Doubly Linked List");
-                //doubly_linked_list_operations();
-                printf(RED_COLOR "Not implemented yet." RESET_COLOR);
+                doubly_linked_list_operations();
                 break;
             }
 
             case 12: {
                 displayTitle("Circular Doubly Linked List");
-                //circular_singly_linked_list_operations();
-                printf(RED_COLOR "Not implemented yet." RESET_COLOR);
+                circular_singly_linked_list_operations();
                 break;
             }
 
             case 13: {
                 displayTitle("Circular Doubly Linked List");
-                //circular_doubly_linked_list_operations();
-                printf(RED_COLOR "Not implemented yet." RESET_COLOR);
+                circular_doubly_linked_list_operations();
                 break;
             }
 
@@ -992,9 +991,63 @@ struct node *del_first_sll(struct node *head) {
     return head;
 }
 
-struct node *del_last_sll(struct node *head) {};
+struct node *del_last_sll(struct node *head) {
 
-struct node *del_at_pos_sll(struct node *head, int pos) {};
+    if(head == NULL) {
+        printf("List is empty!");
+    } else if(head->link == NULL) { //linked list has only one node.
+        free(head);
+        head = NULL;
+    } else {
+        struct node *temp = head;
+        struct node *temp2 = head;
+
+        while(temp->link != NULL) {
+
+            temp2 = temp;
+            temp = temp->link;
+
+        }
+
+        temp2->link = NULL;
+        free(temp);
+        temp = NULL;
+    }
+
+    return head;
+
+};
+
+struct node *del_at_pos_sll(struct node *head, int pos) {
+
+    struct node *current = head;
+    struct node *previous = head;
+
+    if(head == NULL) {
+        printf("List is empty!");
+    } else if(pos == 1) { //linked list has only one node.
+        head = current->link;
+        free(current);
+        current = NULL;
+    } else {
+
+        while(pos != 1) {
+
+            previous = current;
+            current = current->link;
+            pos--;
+
+        }
+
+        previous->link = current->link;
+        free(current);
+        current = NULL;
+    }
+
+    return head;
+
+
+};
 
 void singly_linked_list_operations() {
 
@@ -1054,12 +1107,12 @@ void singly_linked_list_operations() {
                 break;
 
             case 5:
-                //del_last_sll(head);
+                head = del_last_sll(head);
                 break;
 
             case 6:{
                 int pos = getANumber("Please enter the position where to delete", true);
-                //del_at_pos_sll(head, pos);
+                del_at_pos_sll(head, pos);
                 break;
             }
 
@@ -1130,7 +1183,9 @@ struct node_dll *add_at_end_dll(struct node_dll *head, int d) {
         ptr = ptr->next;
     }
 
+    temp->prev = ptr;
     ptr->next = temp;
+
 
 }
 
@@ -1160,7 +1215,7 @@ void doubly_linked_list_operations() {
 
     while(1) {
 
-        choice = getTheChoiceForSinglyLinkedList();
+        choice = getTheChoiceForDoublyLinkedList();
 
         switch(choice) {
 
@@ -1195,19 +1250,19 @@ void doubly_linked_list_operations() {
 
 
 //Circular Singly Linked List
-int count_of_nodes_csll(struct node *head, bool print_count) {
+int count_of_nodes_csll(struct node *tail, bool print_count) {
 
     int count = 0;
-    if(head == NULL) {
+    if(tail == NULL) {
         printf("Linked list is empty.\n");
     }
     struct node *ptr = NULL;
-    ptr = head;
+    ptr = tail->link; //tail->link means head or the first node.
 
-    while(ptr != NULL) {
+    do {
         count++;
         ptr = ptr->link;
-    }
+    } while(ptr != tail->link);
 
     if(print_count) {
         printf("%d", count);
@@ -1217,19 +1272,42 @@ int count_of_nodes_csll(struct node *head, bool print_count) {
 
 }
 
-void print_csll(struct node *head) {
+void print_csll(struct node *tail) {
 
-    struct node *ptr = head;
-    while(ptr != NULL) {
+    struct node *ptr = tail->link; //tail->next points to the head or first node
+
+    do {
         printf("%d ", ptr->data);
         ptr = ptr->link;
-    }
+    } while(ptr != tail->link);
 
 }
 
-struct node *add_at_end_csll(struct node *head, int d) {
+struct node_dll *add_to_empty_csll(int d) {
 
+    struct node *temp = malloc(sizeof(struct node));
+    temp->data = d;
+    temp->link = temp;
 
+    return temp;
+
+};
+
+struct node *add_at_end_csll(struct node *tail, int d) {
+
+    struct node *newNode = malloc(sizeof(struct node));
+
+    if(tail == NULL) {
+        return add_to_empty_csll(d);
+    }
+
+    newNode->data = d;
+    newNode->link = tail->link;
+
+    tail->link = newNode;
+    tail = newNode;
+
+    return tail;
 
 }
 
@@ -1238,22 +1316,24 @@ void circular_singly_linked_list_operations() {
     int choice, data;
 
     data = getANumber("Please enter the value of the root node", true);
-    struct node *head = malloc(sizeof(struct node));
-    head->data = data;
-    head->link = NULL;
+    struct node *tail = malloc(sizeof(struct node));
+    tail->data = data;
+    tail->link = tail;
 
     /*
     data = getANumber("Please enter the value of the next node", true);
     struct node *current = malloc(sizeof(struct node));
     current->data = 35;
-    current->link = NULL;
-    head->link = current;
+    current->link = tail->link;
+    tail->link = current;
+    tail = current;
 
     data = getANumber("Please enter the value of the next node_sll", true);
     current = malloc(sizeof(struct node));
     current->data = 44;
-    current->link = NULL;
-    head->link->link = current;
+    current->link = tail->link;
+    tail->link = current;
+    tail = current;
     */
 
     while(1) {
@@ -1264,17 +1344,17 @@ void circular_singly_linked_list_operations() {
 
             case 1: {
                 data = getANumber("Please enter the value of the node", true);
-                add_at_end_csll(head, data);
+                add_at_end_csll(tail, data);
                 break;
             }
 
             case 2: {
-                count_of_nodes_csll(head, true);
+                count_of_nodes_csll(tail, true);
                 break;
             }
 
             case 3: {
-                print_csll(head);
+                print_csll(tail);
                 break;
             }
 
@@ -1293,19 +1373,19 @@ void circular_singly_linked_list_operations() {
 
 
 //Circular Doubly Linked List
-int count_of_nodes_cdll(struct node_dll *head, bool return_only) {
+int count_of_nodes_cdll(struct node_dll *tail, bool return_only) {
 
     int count = 0;
-    if(head == NULL) {
+    if(tail == NULL) {
         printf("Linked list is empty.\n");
     }
     struct node_dll *ptr = NULL;
-    ptr = head;
+    ptr = tail->next; //tail->next means the head or first node.
 
-    while(ptr != NULL) {
+    do {
         count++;
         ptr = ptr->next;
-    }
+    } while(ptr != tail->next);
 
     printf("%d", count);
 
@@ -1313,33 +1393,50 @@ int count_of_nodes_cdll(struct node_dll *head, bool return_only) {
         return count;
     }
 
-
 }
 
-void print_cdll(struct node_dll *head) {
+void print_cdll(struct node_dll *tail) {
 
-    struct node_dll *ptr = head;
-    while(ptr != NULL) {
+    if(tail == NULL) {
+        printf("Linked list is empty.\n");
+    }
+
+    struct node_dll *ptr = tail->next; //tail next is the head or first node.
+    do{
         printf("%d ", ptr->data);
         ptr = ptr->next;
-    }
+    } while(ptr != tail->next);
 
 }
 
-struct node_dll *add_at_end_cdll(struct node_dll *head, int d) {
+struct node_dll *add_to_empty_cdll(int d) {
 
-    struct node_dll *ptr = head;
     struct node_dll *temp = malloc(sizeof(struct node_dll));
+    temp->prev = temp;
     temp->data = d;
-    temp->prev = NULL;
-    temp->next = NULL;
+    temp->next = temp;
 
+    return temp;
 
-    while(ptr->next != NULL) {
-        ptr = ptr->next;
+};
+
+struct node_dll *add_at_end_cdll(struct node_dll *tail, int d) {
+
+    struct node_dll *newNode = malloc(sizeof(struct node_dll));
+
+    if(tail == NULL) {
+        return add_to_empty_cdll(d);
     }
 
-    ptr->next = temp;
+
+    newNode->data = d;
+    newNode->prev = tail;
+    newNode->next = tail->next;
+    tail->next = newNode;
+    tail = newNode;
+
+    return tail;
+
 
 }
 
@@ -1348,23 +1445,27 @@ void circular_doubly_linked_list_operations() {
     int choice, data;
 
     data = getANumber("Please enter the value of the root node", true);
-    struct node_dll *head = malloc(sizeof(struct node_dll));
-    head->data = data;
-    head->prev = NULL;
-    head->next = NULL;
+    struct node_dll *tail = malloc(sizeof(struct node_dll));
+    tail->data = data;
+    tail->prev = tail;
+    tail->next = tail;
 
     /*
     data = getANumber("Please enter the value of the next node", true);
     struct node_dll *current = malloc(sizeof(struct node_dll));
     current->data = 35;
-    current->link = NULL;
-    head->link = current;
+    current->prev = tail;
+    current->next = tail->next;
+    tail->next = current;
+    tail = current;
 
     data = getANumber("Please enter the value of the next node", true);
     current = malloc(sizeof(struct node_dll));
     current->data = 44;
-    current->link = NULL;
-    head->link->link = current;
+    current->prev = tail;
+    current->next = tail->next;
+    tail->next = current;
+    tail = current;
     */
 
     while(1) {
@@ -1375,17 +1476,17 @@ void circular_doubly_linked_list_operations() {
 
             case 1: {
                 data = getANumber("Please enter the value of the node", true);
-                add_at_end_cdll(head, data);
+                add_at_end_cdll(tail, data);
                 break;
             }
 
             case 2: {
-                count_of_nodes_cdll(head, true);
+                count_of_nodes_cdll(tail, true);
                 break;
             }
 
             case 3: {
-                print_cdll(head);
+                print_cdll(tail);
                 break;
             }
 
