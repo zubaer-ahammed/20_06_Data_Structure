@@ -90,6 +90,20 @@ struct node_dll *add_at_end_cdll(struct node_dll *tail, int d);
 void print_cdll(struct node_dll *tail);
 int count_of_nodes_cdll(struct node_dll *tail, bool print_value);
 
+//Binary Tree
+int getTheChoiceForBinaryTree();
+void binary_tree_operations();
+struct tree_node {
+    struct tree_node *left;
+    int data;
+    struct tree_node *right;
+};
+
+struct tree_node* createTree();
+void print_preorder(struct tree_node* root);
+void print_inorder(struct tree_node* root);
+void print_postorder(struct tree_node* root);
+
 //ANSI escape sequences for text colors
 #define RED_COLOR "\033[1;31m"
 #define GREEN_COLOR "\033[1;32m"
@@ -225,6 +239,12 @@ int main() {
                 break;
             }
 
+            case 14: {
+                displayTitle("Binary Tree");
+                binary_tree_operations();
+                break;
+            }
+
             default:
                 printf(RED_COLOR "\nInvalid choice. Please select a valid choice from the menu.\a\n" RESET_COLOR);
                 break;
@@ -296,7 +316,7 @@ int getTheChoice() {
     printf("+----------------------------------------------------------------------------+\n");
     printf("|   0. End program    6. Fibonacci series    12. Circular Singly Linked List |\n");
     printf("|   1. Linear Search  7. Tower of Hanoi      13. Circular Doubly Linked List |\n");
-    printf("|   2. Binary Search  8. Stack Operations                                    |\n");
+    printf("|   2. Binary Search  8. Stack Operations    14. Binary Tree                 |\n");
     printf("|   3. Bubble Sort    9. Queue Operations                                    |\n");
     printf("|   4. Insertion Sort 10. Singly Linked List                                 |\n");
     printf("|   5. Factorial      11. Doubly Linked List                                 |\n");
@@ -394,6 +414,24 @@ int getTheChoiceForCircularLinkedList() {
     scanf("%d", &choice);
     return choice;
 }
+
+int getTheChoiceForBinaryTree() {
+    int choice;
+    printf("\n");
+    printf("+----------------------------------------------------------------------------+\n");
+    printf("|   Binary Tree Options:                                                     |\n");
+    printf("+----------------------------------------------------------------------------+\n");
+    printf("|   1. Print (Preorder Traversal)                                            |\n");
+    printf("|   2. Print (Inorder Traversal)                                             |\n");
+    printf("|   3. Print (Postorder Traversal)                                           |\n");
+    printf("|   4. Quit (Back to the Main Menu)                                          |\n");
+    printf("+----------------------------------------------------------------------------+\n");
+
+    printf(BLUE_COLOR "Enter your choice: " RESET_COLOR);
+    scanf("%d", &choice);
+    return choice;
+}
+
 
 int getNumberOfElements() {
     int n;
@@ -964,9 +1002,10 @@ struct node *add_at_pos_sll(struct node *head, int d, int pos) {
         ptr2->data = d;
         ptr2->link = NULL;
 
-        pos--;
+        //Instead of this approach, we can also use the previous, current node approach used in del_at_pos
+        pos--; /*Because, we want to find the node just before the expected position. */
         while(pos != 1) {
-            ptr = ptr->link;
+            ptr = ptr->link; /*We are moving head/ptr toward position and our goal is to find the node just before the position */
             pos--;
         }
 
@@ -1004,12 +1043,12 @@ struct node *del_last_sll(struct node *head) {
 
         while(temp->link != NULL) {
 
-            temp2 = temp;
+            temp2 = temp; /* We are getting the node just before the last node, so that we can make it the last node after deleting the current last node. */
             temp = temp->link;
 
         }
 
-        temp2->link = NULL;
+        temp2->link = NULL; /* Making the previous node just before the last node the new last node */
         free(temp);
         temp = NULL;
     }
@@ -1025,7 +1064,7 @@ struct node *del_at_pos_sll(struct node *head, int pos) {
 
     if(head == NULL) {
         printf("List is empty!");
-    } else if(pos == 1) { //linked list has only one node.
+    } else if(pos == 1) {
         head = current->link;
         free(current);
         current = NULL;
@@ -1487,6 +1526,104 @@ void circular_doubly_linked_list_operations() {
 
             case 3: {
                 print_cdll(tail);
+                break;
+            }
+
+            case 4:
+                return;
+
+            default:
+                printf(RED_COLOR "Wrong choice.\n" RESET_COLOR);
+                break;
+
+        }
+
+    }
+
+}
+
+struct tree_node* createTree() {
+
+    int input, data;
+    printf(BLUE_COLOR "Do you want to add a node? (0 for no and 1 for yes): " RESET_COLOR);
+    scanf("%d", &input);
+    if(!input) {
+        return NULL;
+    } else {
+
+        struct tree_node* newNode = malloc(sizeof(struct tree_node));
+        printf("Enter the data: ");
+        scanf("%d", &data);
+
+        newNode->data = data;
+        printf(GREEN_COLOR "\nLeft child of %d:\n" RESET_COLOR, newNode->data);
+        newNode->left = createTree();
+        printf(GREEN_COLOR "\nRight child of %d:\n" RESET_COLOR, newNode->data);
+        newNode->right = createTree();
+
+        return newNode;
+
+    }
+
+}
+
+void print_preorder(struct tree_node* root) {
+    if(root == NULL) {
+        return;
+    }
+
+    printf("%d ", root->data);
+    print_preorder(root->left);
+    print_preorder(root->right);
+}
+
+void print_inorder(struct tree_node* root) {
+    if(root == NULL) {
+        return;
+    }
+
+    print_preorder(root->left);
+    printf("%d ", root->data);
+    print_preorder(root->right);
+}
+
+void print_postorder(struct tree_node* root) {
+    if(root == NULL) {
+        return;
+    }
+
+    print_preorder(root->left);
+    print_preorder(root->right);
+    printf("%d ", root->data);
+}
+
+void binary_tree_operations() {
+
+    int choice;
+
+    struct tree_node *root = createTree();
+
+    while(1) {
+
+        choice = getTheChoiceForBinaryTree();
+
+        switch(choice) {
+
+            case 1: {
+                printf(GREEN_COLOR "\nPreorder traversal: " RESET_COLOR);
+                print_preorder(root);
+                break;
+            }
+
+            case 2: {
+                printf(GREEN_COLOR "\nInorder traversal: " RESET_COLOR);
+                print_inorder(root);
+                break;
+            }
+
+            case 3: {
+                printf(GREEN_COLOR "\nPostorder traversal: " RESET_COLOR);
+                print_postorder(root);
                 break;
             }
 
