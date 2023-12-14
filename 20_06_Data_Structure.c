@@ -104,6 +104,15 @@ void print_preorder(struct tree_node* root);
 void print_inorder(struct tree_node* root);
 void print_postorder(struct tree_node* root);
 
+//Merge Sort
+void merge(int arr[], int l, int mid, int h);
+void mergeSort(int arr[], int l, int h);
+
+//Quick Sort
+void swap(int *a, int *b);
+int partition(int arr[], int l, int h);
+void quickSort(int arr[], int l, int h);
+
 //ANSI escape sequences for text colors
 #define RED_COLOR "\033[1;31m"
 #define GREEN_COLOR "\033[1;32m"
@@ -245,6 +254,34 @@ int main() {
                 break;
             }
 
+            case 15: {
+                displayTitle("Merge Sort");
+                int n = getNumberOfElements();
+                int numbers[n];
+                enterArrayElements(n, numbers);
+
+                mergeSort(numbers, 0, n-1);
+
+                printf(GREEN_COLOR "\nThe sorted array is: " RESET_COLOR);
+                printNumbersArray(numbers, n);
+
+                break;
+            }
+
+            case 16: {
+                displayTitle("Quick Sort");
+                int n = getNumberOfElements();
+                int numbers[n];
+                enterArrayElements(n, numbers);
+
+                quickSort(numbers, 0, n-1);
+
+                printf(GREEN_COLOR "\nThe sorted array is: " RESET_COLOR);
+                printNumbersArray(numbers, n);
+
+                break;
+            }
+
             default:
                 printf(RED_COLOR "\nInvalid choice. Please select a valid choice from the menu.\a\n" RESET_COLOR);
                 break;
@@ -317,8 +354,8 @@ int getTheChoice() {
     printf("|   0. End program    6. Fibonacci series    12. Circular Singly Linked List |\n");
     printf("|   1. Linear Search  7. Tower of Hanoi      13. Circular Doubly Linked List |\n");
     printf("|   2. Binary Search  8. Stack Operations    14. Binary Tree                 |\n");
-    printf("|   3. Bubble Sort    9. Queue Operations                                    |\n");
-    printf("|   4. Insertion Sort 10. Singly Linked List                                 |\n");
+    printf("|   3. Bubble Sort    9. Queue Operations    15. Merge Sort                  |\n");
+    printf("|   4. Insertion Sort 10. Singly Linked List 16. Quick Sort                  |\n");
     printf("|   5. Factorial      11. Doubly Linked List                                 |\n");
     printf("+----------------------------------------------------------------------------+\n");
 
@@ -1640,3 +1677,102 @@ void binary_tree_operations() {
 
 }
 
+
+//Merge Sort
+void merge(int arr[], int l, int mid, int h) {
+
+    //Note: I am using a temp array instead of dividing left_array and right_array.
+
+    int i=l, j=mid+1, k=l;
+    int temp[h];
+
+    //Sort and merge two portions (subarrays) into the temp array.
+    while(i <= mid && j <= h) {
+
+        if(arr[i] < arr[j]) {
+            temp[k++] = arr[i++];
+        } else {
+            temp[k++] = arr[j++];
+        }
+    }
+
+    /*now add the remaining (if any) elements from both portions (subarrays) to the temporary array */
+    while(i <= mid) {
+        temp[k++] = arr[i++];
+    }
+
+    while(j <= h) {
+        temp[k++] = arr[j++];
+    }
+
+    //Finally copy the temp array to the original array.
+    for(i=l; i<=h; i++) {
+        arr[i] = temp[i];
+    }
+
+}
+
+void mergeSort(int arr[], int l, int h) {
+
+    int mid;
+
+    if(l<h) {
+        mid = (l+h) / 2;
+        mergeSort(arr, l, mid);
+        mergeSort(arr, mid+1, h);
+        merge(arr, l, mid, h);
+    }
+
+}
+
+//Quick Sort
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int partition(int arr[], int l, int h) {
+
+    int pivot = arr[h]; //Selecting rightmost element as pivot
+    /*fix a pointer for the greater element. It is taken as l-1 = 0-1 = -1 because the first element may not be larger than the pivot. */
+    int i = l-1;
+
+    for(int j=l; j<h; j++) {
+
+        /* We have already fixed a greater element with index i, now we are checking if any element
+        positioned after our selected greater element is smaller than the pivot.
+        If so, we will have to swap that smaller element with our selected greater element (so that all
+        selement on the left side of the pivot is less than the pivot and all elments
+        on the right side of the pivot is greater than the pivot */
+
+        if(arr[j] <= pivot) {
+            /* initially the value of i was 0-1 = -1, now it becoemes = 0. This way, we make it the first element only if the first element is greater than or equal pivot. */
+            i++;
+            swap(&arr[i], &arr[j]);
+
+        }
+
+    }
+
+    /* After all iterations, put the pivot on it's correct position
+    by swapping the pivot element (arr[h]) with the greater element at i */
+
+    swap(&arr[i+1], &arr[h]); //Because initially i was taken = l-1 = 0-1 = -1
+
+    //Finally return the partion point.
+    return (i+1);
+
+}
+
+void quickSort(int arr[], int l, int h) {
+
+    if(l<h) {
+
+        int pi = partition(arr, l, h);
+        quickSort(arr, l, pi-1);
+        quickSort(arr, pi, h);
+
+    }
+
+}

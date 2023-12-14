@@ -16,3 +16,5 @@ CSE21P6: Data Structures Lab Programs of Md. Zubaer Ahammed (ID: 20052801006)
 12. Circular Singly Linked List
 13. Circular Doubly Linked List
 14. Binary Tree
+15. Merge Sort
+16. Quick Sort
