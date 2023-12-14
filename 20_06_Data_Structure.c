@@ -1735,7 +1735,8 @@ void swap(int *a, int *b) {
 int partition(int arr[], int l, int h) {
 
     int pivot = arr[h]; //Selecting rightmost element as pivot
-    int i = l-1; //fix a pointer for the greater element
+    /*fix a pointer for the greater element. It is taken as l-1 = 0-1 = -1 because the first element may not be larger than the pivot. */
+    int i = l-1;
 
     for(int j=l; j<h; j++) {
 
@@ -1746,8 +1747,8 @@ int partition(int arr[], int l, int h) {
         on the right side of the pivot is greater than the pivot */
 
         if(arr[j] <= pivot) {
-
-            i++; //initially the value of i was 0-1 = -1, now it becoemes = 0
+            /* initially the value of i was 0-1 = -1, now it becoemes = 0. This way, we make it the first element only if the first element is greater than or equal pivot. */
+            i++;
             swap(&arr[i], &arr[j]);
 
         }
@@ -1757,7 +1758,7 @@ int partition(int arr[], int l, int h) {
     /* After all iterations, put the pivot on it's correct position
     by swapping the pivot element (arr[h]) with the greater element at i */
 
-    swap(&arr[i+1], &arr[h]);
+    swap(&arr[i+1], &arr[h]); //Because initially i was taken = l-1 = 0-1 = -1
 
     //Finally return the partion point.
     return (i+1);
