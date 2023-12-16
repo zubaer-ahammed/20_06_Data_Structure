@@ -1619,9 +1619,9 @@ void print_inorder(struct tree_node* root) {
         return;
     }
 
-    print_preorder(root->left);
+    print_inorder(root->left);
     printf("%d ", root->data);
-    print_preorder(root->right);
+    print_inorder(root->right);
 }
 
 void print_postorder(struct tree_node* root) {
@@ -1629,8 +1629,8 @@ void print_postorder(struct tree_node* root) {
         return;
     }
 
-    print_preorder(root->left);
-    print_preorder(root->right);
+    print_postorder(root->left);
+    print_postorder(root->right);
     printf("%d ", root->data);
 }
 
